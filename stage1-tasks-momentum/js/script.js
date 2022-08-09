@@ -1,6 +1,6 @@
 const time = document.querySelector('.time');
 
-setInterval(function () {
+setInterval(function getTimeOfDay() {
     let currentTime = new Date(),
         hours = currentTime.getHours(),
         minutes = currentTime.getMinutes(),
@@ -25,58 +25,61 @@ const date = document.querySelector('.date')
 const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 setInterval(function () {
     let weekDay = new Date(),
-        day = weekDay.getDay(),
+        dayOfDay = weekDay.getDay(),
         dayToday = weekDay.getDate();
-    if (dayToday == 1) {
-        dayToday = daysOfWeek[0]
+    if (dayOfDay == 1) {
+        dayOfDay = daysOfWeek[0]
     }
-    if (dayToday == 2) {
-        dayToday = daysOfWeek[1]
+    if (dayOfDay == 2) {
+        dayOfDay = daysOfWeek[1]
     }
-    if (dayToday == 3) {
-        dayToday = daysOfWeek[2]
+    if (dayOfDay == 3) {
+        dayOfDay = daysOfWeek[2]
     }
-    if (dayToday == 4) {
-        dayToday = daysOfWeek[3]
+    if (dayOfDay == 4) {
+        dayOfDay = daysOfWeek[3]
     }
-    if (dayToday == 5) {
-        dayToday = daysOfWeek[4]
+    if (dayOfDay == 5) {
+        dayOfDay = daysOfWeek[4]
     }
-    if (dayToday == 6) {
-        dayToday = daysOfWeek[5]
+    if (dayOfDay == 6) {
+        dayOfDay = daysOfWeek[5]
     }
-    if (dayToday == 7) {
-        dayToday = daysOfWeek[6]
+    if (dayOfDay == 7) {
+        dayOfDay = daysOfWeek[6]
     }
     const moonth = new Date().toLocaleString('en', {
         month: 'long'
     })
-    date.innerHTML = dayToday + ", " + moonth + " " + day
+    date.innerHTML = dayOfDay + ", " + moonth + " " + dayToday
 })
 
 const timeOfSet = document.querySelector('.greeting')
 
 GreetingDayOut = ['morning', 'afternoon', 'evening', 'night']
 
-setTimeout(function () {
+const GreetingsOfDay = () => {
     let day = new Date(),
-        hourDayOut = day.toLocaleTimeString().slice(0, -6),
+        hourDayOut = day.getHours(),
         GreetingDay;
 
     if (hourDayOut >= 0 && hourDayOut < 6) {
         GreetingDay = GreetingDayOut[0]
     }
-    if (hourDayOut >= 12 && hourDayOut < 18) {
+    else if (hourDayOut >= 12 && hourDayOut < 18) {
         GreetingDay = GreetingDayOut[1]
     }
-    if (hourDayOut >= 18 && hourDayOut < 23) {
+    else if (hourDayOut >= 18 && hourDayOut < 23) {
         GreetingDay = GreetingDayOut[2]
     }
     else {
         GreetingDay = GreetingDayOut[3]
     }
-    timeOfSet.innerHTML = 'Good ' + GreetingDay
-})
+    timeOfSet.innerHTML = 'Good ' + GreetingDay;
+
+    return GreetingDay
+}
+
 
 ///------localStorage-----///
 
@@ -89,8 +92,79 @@ function setLocalStorage() {
 window.addEventListener('beforeunload', setLocalStorage)
 
 function getLocalStorage() {
-    if(localStorage.getItem('nameOutput')) {
+    if (localStorage.getItem('nameOutput')) {
         nameInput.value = localStorage.getItem('nameOutput');
-      }
+    }
 }
 window.addEventListener('load', getLocalStorage)
+
+//// slider img ////
+
+let bgNum = Math.floor(Math.random() * ((20 - 1) + 2));
+
+const buttonLeft = document.querySelector('.slide-prev.slider-icon');
+const buttonRight = document.querySelector('.slide-next.slider-icon');
+let randomNum = bgNum;
+
+function getSlidePrev() {
+    if (randomNum === 1) {
+        randomNum = 20;
+    } else {
+        randomNum--
+        function setBg() {
+            let timeOfDay = GreetingsOfDay();
+            const img = new Image();
+            img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${randomNum}.jpg`;
+            img.onload = () => {
+                body.style.backgroundImage = `url(${img.src})`;
+            };
+        }
+        setBg();
+        console.log(randomNum)
+    }
+}
+
+
+function getSlideNext() {
+    if (randomNum === 20) {
+        randomNum = 1
+
+    } else {
+        randomNum++
+        function setBg() {
+            let timeOfDay = GreetingsOfDay();
+            const img = new Image();
+            img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${randomNum}.jpg`;
+            img.onload = () => {
+                body.style.backgroundImage = `url(${img.src})`;
+            };
+        }
+        setBg();
+        console.log(randomNum)
+    }
+}
+buttonRight.addEventListener('click', getSlideNext)
+buttonLeft.addEventListener('click', getSlidePrev)
+
+console.log(bgNum)
+
+const body = document.querySelector('body')
+
+const setBg = () => {
+    let timeOfDay = GreetingsOfDay();
+    const img = new Image();
+    img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${bgNum}.jpg`;
+    img.onload = () => {
+        body.style.backgroundImage = `url(${img.src})`;
+    };
+}
+setBg();
+
+
+
+
+
+
+
+
+
