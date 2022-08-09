@@ -88,12 +88,20 @@ const nameInputHolder = nameInput.placeholder = '[Enter name]';
 
 function setLocalStorage() {
     localStorage.setItem('nameOutput', nameInput.value);
+    localStorage.setItem('city', city.value)
+    localStorage.setItem('weather', getWeather().value)
 }
 window.addEventListener('beforeunload', setLocalStorage)
 
 function getLocalStorage() {
     if (localStorage.getItem('nameOutput')) {
         nameInput.value = localStorage.getItem('nameOutput');
+    }
+    if (localStorage.getItem('city')) {
+        city.value = localStorage.getItem('city');
+    }
+    if (localStorage.getItem('weather')) {
+        getWeather().value = localStorage.getItem('weather');
     }
 }
 window.addEventListener('load', getLocalStorage)
@@ -159,6 +167,34 @@ const setBg = () => {
     };
 }
 setBg();
+
+//..weather widget..//
+//appid
+// https://api.openweathermap.org/data/2.5/weather?q=Minsk&lang=en&appid=9c95a9e4172b94186fe814eb375797ef&units=metric
+const weatherIcon = document.querySelector('.weather-icon')
+const temperature = document.querySelector('.temperature')
+const weatherDescription = document.querySelector('.weather-description')
+const wind = document.querySelector('.wind')
+const humidity = document.querySelector('.humidity')
+const city = document.querySelector('.city')
+const cityOfMinsk = city.value = 'Minsk'
+async function getWeather() { 
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=9c95a9e4172b94186fe814eb375797ef&units=metric`;
+    const res = await fetch(url);   
+    const data = await res.json();
+    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+    temperature.textContent = `${Math.floor(data.main.temp)}°C`;
+    weatherDescription.textContent = data.weather[0].description;
+    wind.textContent = `Wind speed: ${Math.ceil(data.wind.speed)} m/s`;
+    humidity.textContent = `Humidity: ${data.main.humidity}%`;
+  }
+  getWeather()
+
+
+  city.addEventListener('change', getWeather);
+
+
+
 
 
 
