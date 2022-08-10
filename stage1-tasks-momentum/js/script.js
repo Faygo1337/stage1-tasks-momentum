@@ -178,23 +178,43 @@ const wind = document.querySelector('.wind')
 const humidity = document.querySelector('.humidity')
 const city = document.querySelector('.city')
 const cityOfMinsk = city.value = 'Minsk'
-async function getWeather() { 
+async function getWeather() {
     try {
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=9c95a9e4172b94186fe814eb375797ef&units=metric`;
-    const res = await fetch(url);   
-    const data = await res.json();
-    weatherIcon.classList.add(`owf-${data.weather[0].id}`);
-    temperature.textContent = `${Math.floor(data.main.temp)}°C`;
-    weatherDescription.textContent = data.weather[0].description;
-    wind.textContent = `Wind speed: ${Math.ceil(data.wind.speed)} m/s`;
-    humidity.textContent = `Humidity: ${data.main.humidity}%`;
-  }
-  catch(err){
-    alert(`Error! city not found for '${city.value}'!`)
-  };
+        let url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=en&appid=9c95a9e4172b94186fe814eb375797ef&units=metric`;
+        const res = await fetch(url);
+        const data = await res.json();
+        weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+        temperature.textContent = `${Math.floor(data.main.temp)}°C`;
+        weatherDescription.textContent = data.weather[0].description;
+        wind.textContent = `Wind speed: ${Math.ceil(data.wind.speed)} m/s`;
+        humidity.textContent = `Humidity: ${data.main.humidity}%`;
+    }
+    catch (err) {
+        alert(`Error! city not found for '${city.value}'!`)
+    };
 }
-  getWeather()
-  city.addEventListener('change', getWeather);
+getWeather()
+city.addEventListener('change', getWeather);
+
+//// quote of the day ////
+
+const quote = document.querySelector('.quote');
+const changeQuote = document.querySelector('.change-quote')
+const author = document.querySelector('.author');
+
+async function getQuote() {
+    
+    const urlQuote = `https://favqs.com/api/qotd`;
+    const res = await fetch(urlQuote);
+    const data = await res.json();
+    quote.textContent = `"${data.quote.body}"`;
+    author.textContent = data.quote.author;
+}
+getQuote()
+
+changeQuote.addEventListener('click', getQuote);
+
+
 
 
 
