@@ -1,3 +1,5 @@
+import playList from "./playList.js";
+
 const time = document.querySelector('.time');
 
 setInterval(function getTimeOfDay() {
@@ -63,7 +65,7 @@ const GreetingsOfDay = () => {
         hourDayOut = day.getHours(),
         GreetingDay;
 
-    if (hourDayOut >= 0 && hourDayOut < 6) {
+    if (hourDayOut >= 0 && hourDayOut < 12) {
         GreetingDay = GreetingDayOut[0]
     }
     else if (hourDayOut >= 12 && hourDayOut < 18) {
@@ -203,7 +205,6 @@ const changeQuote = document.querySelector('.change-quote')
 const author = document.querySelector('.author');
 
 async function getQuote() {
-    
     const urlQuote = `https://favqs.com/api/qotd`;
     const res = await fetch(urlQuote);
     const data = await res.json();
@@ -214,7 +215,55 @@ getQuote()
 
 changeQuote.addEventListener('click', getQuote);
 
+//// audioplayer ////
 
 
+const button = document.querySelector('.play.player-icon');
+const prevIcon = document.querySelector('.play-prev.player-icon')
+const nextIcon = document.querySelector('.play-next.player-icon')
+let isPlay = false;
+let playNum = 0;
+const audio = new Audio();
+
+function playAudio() {
+    audio.src = playList[playNum].src
+    audio.currentTime = 0;
+    if (!isPlay) {
+        audio.play();
+        isPlay = true;
+    }
+    else {
+        isPlay = false;
+        audio.pause();
+    }
+}
+playAudio()
+
+function toggleBtn() {
+    button.classList.toggle('pause')
+}
+
+button.addEventListener('click', toggleBtn, playAudio);
+
+function playNext() {
+    if (playNum === 3) {
+        playNum = -1
+    } else {
+        playNum++
+        console.log(playNum)
+    }
+}
+
+function playPrev() {
+    if (playNum === 0) {
+        playNum = 4
+    } else {
+        playNum--
+        console.log(playNum)
+    }
+}
+
+nextIcon.addEventListener('click', playNext)
+prevIcon.addEventListener('click', playPrev)
 
 
