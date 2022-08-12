@@ -6,8 +6,8 @@ setInterval(function getTimeOfDay() {
     let currentTime = new Date(),
         hours = currentTime.getHours(),
         minutes = currentTime.getMinutes(),
-        seconds = currentTime.getSeconds();
-    day = currentTime.getDay()
+        seconds = currentTime.getSeconds(),
+        day = currentTime.getDay()
     if (hours < 10) {
         hours = "0" + hours
     }
@@ -58,14 +58,14 @@ setInterval(function () {
 
 const timeOfSet = document.querySelector('.greeting')
 
-GreetingDayOut = ['morning', 'afternoon', 'evening', 'night']
+let GreetingDayOut = ['morning', 'afternoon', 'evening', 'night']
 
 const GreetingsOfDay = () => {
     let day = new Date(),
         hourDayOut = day.getHours(),
         GreetingDay;
 
-    if (hourDayOut >= 0 && hourDayOut < 12) {
+    if (hourDayOut >= 6 && hourDayOut < 12) {
         GreetingDay = GreetingDayOut[0]
     }
     else if (hourDayOut >= 12 && hourDayOut < 18) {
@@ -124,7 +124,11 @@ function getSlidePrev() {
         function setBg() {
             let timeOfDay = GreetingsOfDay();
             const img = new Image();
-            img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${randomNum}.jpg`;
+            if (randomNum < 10) {
+                img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/0${randomNum}.jpg`;
+            } else {
+                img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${randomNum}.jpg`;
+            }
             img.onload = () => {
                 body.style.backgroundImage = `url(${img.src})`;
             };
@@ -144,7 +148,11 @@ function getSlideNext() {
         function setBg() {
             let timeOfDay = GreetingsOfDay();
             const img = new Image();
-            img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${randomNum}.jpg`;
+            if (randomNum < 10) {
+                img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/0${randomNum}.jpg`;
+            } else {
+                img.src = `https://raw.githubusercontent.com/Faygo1337/stage1-tasks/assets/images/${timeOfDay}/${randomNum}.jpg`;
+            }
             img.onload = () => {
                 body.style.backgroundImage = `url(${img.src})`;
             };
@@ -216,15 +224,12 @@ getQuote()
 changeQuote.addEventListener('click', getQuote);
 
 //// audioplayer ////
-
-
 const button = document.querySelector('.play.player-icon');
 const prevIcon = document.querySelector('.play-prev.player-icon')
 const nextIcon = document.querySelector('.play-next.player-icon')
 let isPlay = false;
 let playNum = 0;
 const audio = new Audio();
-
 function playAudio() {
     audio.src = playList[playNum].src
     audio.currentTime = 0;
@@ -236,34 +241,68 @@ function playAudio() {
         isPlay = false;
         audio.pause();
     }
-}
-playAudio()
-
-function toggleBtn() {
     button.classList.toggle('pause')
+
 }
-
-button.addEventListener('click', toggleBtn, playAudio);
-
+button.addEventListener('click', playAudio);
 function playNext() {
     if (playNum === 3) {
         playNum = -1
     } else {
         playNum++
+        audio.src = playList[playNum].src;
+        audio.play()
+
         console.log(playNum)
     }
 }
-
 function playPrev() {
     if (playNum === 0) {
         playNum = 4
     } else {
         playNum--
+        audio.src = playList[playNum].src;
+        audio.play()
         console.log(playNum)
     }
 }
 
+audio.addEventListener('ended', function () {
+    if (playNum === 3) {
+        playNum = 0;
+    } else {
+        playNum++
+        audio.src = playList[playNum].src;
+        audio.play()
+    }
+
+});
+
 nextIcon.addEventListener('click', playNext)
+
 prevIcon.addEventListener('click', playPrev)
 
 
+
+const playListUI = document.querySelector('.play-list')
+// const liAll = document.querySelectorAll('.play-item')
+function playFor() {
+playList.forEach((el, index) => {
+    const li = document.createElement('li');
+    li.classList.add('play-item')
+    li.textContent = el.title
+    playListUI.append(li)
+
+    if (playNum ===  el.index) {
+        li.classList.add('item-active')
+    } else {
+        
+        li.classList.remove('item-active')
+    }
+
+    console.log(index)
+})
+}
+playFor()
+// nextIcon.addEventListener('click', playFor)
+// prevIcon.addEventListener('click', playFor)
