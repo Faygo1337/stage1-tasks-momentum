@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="css/style.css" />
   <title>momentum</title>
 </head>
+
 <body>
   <header class="header">
     <div class="player">
@@ -16,9 +18,36 @@
         <button class="play player-icon"></button>
         <button class="play-next player-icon"></button>
         <audio type="module" src="js/script.js"></audio>
+        <div class="slider">
+          <output for="fader" id="volume">100</output>
+          <output class="time_duration"></output>
+          <output class="durationIsNow">00:00</output>
+
+          <input class="volumeOutput" type="range" id="fader" min="0" max="100" step="1" volume="1.0" value="100"
+            oninput="outputUpdate(value)">
+        </div>
+        <img class="volume_on" src="svg/volume-up-4-xxl.png" alt="volume_on">
+        <img class="volume_off hidden" src="svg/mute-2-xxl.png" alt="volume_off">
+      </div>
+      <div class="container">
+        <div class="progress-bar"></div>
       </div>
       <ul class="play-list"></ul>
     </div>
+    <script type="text/javascript">
+      function outputUpdate(vol) {
+        var output = document.querySelector('#volume');
+        var hidden = document.querySelector('.hidden')
+        output.value = vol;
+        output.style.left = vol - 20 + 'px';
+        if (output.value > 9) {
+          output.style.left = vol - 30 + 'px';
+        }
+        if (output.value > 99) {
+          output.style.left = vol - 40 + 'px';
+        }
+      }
+    </script>
     <div class="weather">
       <input type="text" class="city" />
       <i class="weather-icon owf"></i>
@@ -52,4 +81,5 @@
   </footer>
   <script type="module" src="js/script.js"></script>
 </body>
+
 </html>
